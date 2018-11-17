@@ -42,7 +42,12 @@ cmy_count = len(countries_missing_years)
 logging.debug(f' {cmy_count} countries have input for only 1 year instead of 15 \n')
 logging.debug(countries_missing_years)
 logging.debug('\n')
+logging.debug(' These countries will be removed from the dataset as we don\'t have enough information about them. \n')
 
+for i in countries_missing_years.index:
+    df = df[df.Country != i]
+logging.debug(' Above countries are removed')    
+    
 logging.debug(f' ***********************************************')
 logging.debug(f' PART 2) DROPPING ALL ROWS WITH NAN VALUES')
 logging.debug(f' ***********************************************\n')
@@ -53,13 +58,15 @@ logging.debug(' In the dataset, unkown values are filled as NaN or 0.')
 logging.debug(' I am replacing all 0 values with NaN.')
 logging.debug(' df_NaN in the code contains the above mentioned form of the data.\n')
 df_NaN = df.replace(0,np.nan)
+df_NaN_Original = df_NaN.copy()
 
 # Dropping NaN rows
 
 # Dropping rows containing NaN in any of their columns
 logging.debug(' Dropping all rows that contain NaN from df_NaN.')
 logging.debug(' This new version is named df_NoNaN.\n')
-df_NoNaN = df_NaN.dropna(0)
+df_NoNaN = df_NaN.copy()
+df_NoNaN = df_NoNaN.dropna(0)
 
 logging.debug(f' ***********************************************')
 logging.debug(f' PART 3) FEATURE BY FEATURE, DROPPING NAN VALUES')
@@ -72,7 +79,10 @@ cleaned_features = [df[['Country','Year','Life expectancy ', i]].dropna(0)  for 
 cleaned_features.append(df[['Country','Year','Life expectancy ']].dropna(0))
 logging.debug(' The result is cleaned_features in the code, and it\'s format is as follows (feature,(rows,columns)):')
 logging.debug(' (The 4 columns include Country, Year, Life expectancy, and the expressed feature).\n')
-[logging.debug(f' {i}- { indices[i], cleaned_features[i].shape}.') for i in range(len(indices))]
+
+for i in range(len(indices)):
+    logging.debug(f' {i}- { indices[i], cleaned_features[i].shape}.')
+    
 logging.debug(f" 19- ('Country, Year and Life expectancy'), {cleaned_features[-1].shape} :\n")
 
 # Modifying the NaN values by interpolation and mean
@@ -84,7 +94,7 @@ logging.debug(f' *******************************************\n')
 
 logging.debug(' Modifying the NaN values of df_NaN by interpolation and mean.')
 countries = df['Country'].unique()
-df_modified = df_NaN
+df_modified = df_NaN.copy()
 
 logging.debug(' First I do interpolation on df_NaN, country by country and feature by feature.')
 logging.debug(' The result is stored in df_modified.\n')
@@ -97,7 +107,9 @@ logging.debug(f' After interpolation, df_modified still contains NaN values: {is
 logging.debug(f' These NaN values are the ones that could not be interpolated, the whole column for the specific country\'s feature was NaN.')
 logging.debug(f' For this type of NaN value, we have no info, so they will be filled with the column averages of the whole data.\n')
 
-means = df_NaN.mean()
+means = df_NaN.copy()
+means = means.mean()
+
 for i in means.index:
     df_modified[i] = df_modified[i].fillna(means[i])
     
@@ -123,7 +135,7 @@ def create_csv():
     assert 'output' not in check_dir[0][1], 'Please erase the current output directory "./output".'
     
     os.mkdir('output')
-    df_NaN.to_csv('output/df_NaN.csv')
+    df_NaN_Original.to_csv('output/df_NaN.csv')
     df_NoNaN.to_csv('output/df_NoNaN.csv')
     df_modified.to_csv('output/df_modified.csv')
     
