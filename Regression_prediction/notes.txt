@@ -1,0 +1,6 @@
+Try linear regression model, (if time is aviablable, try more?)
+see what happens if we change one of some of the features and show them on the map.
+Based on assumption that none of the other parameters matters to life expectancy , such as historical effects, culture, religion, politics. 
+Purely rely on the data we have.
+Maybe show predictions on the map? (in presentation slides.)
+ 
