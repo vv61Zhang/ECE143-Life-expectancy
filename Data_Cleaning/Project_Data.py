@@ -21,9 +21,10 @@ logging.debug(f' ***************************')
 logging.debug(f' PART 1) ANALYZING THE DATA')
 logging.debug(f' ***************************\n')
 
-check_dir = list(os.walk("."))
-assert 'Life Expectancy Data.csv' in check_dir[0][2], 'Please copy "Life Expectancy Data.csv" to the current directory.'
+
+assert os.path.isfile('Life Expectancy Data.csv'),'Please copy "Life Expectancy Data.csv" to the current directory.'
     
+
 df = pd.read_csv('Life Expectancy Data.csv')
 columns = list(df.columns.values)
 logging.debug(f'\nThe column labels of the data are : {columns}\n')
@@ -131,8 +132,8 @@ def create_csv():
     output/df_modified.csv
     output/features/<feature_name>.csv
     '''
-    check_dir = list(os.walk("."))
-    assert 'output' not in check_dir[0][1], 'Please erase the current output directory "./output".'
+    
+    assert False == os.path.isfile('Life Expectancy Data.csv'),'Please erase the current output directory "./output".'
     
     os.mkdir('output')
     df_NaN_Original.to_csv('output/df_NaN.csv')
