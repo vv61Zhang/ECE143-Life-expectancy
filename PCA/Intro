@@ -1,0 +1,17 @@
+The sheer size of data in the modern age is not only a challenge for computer hardware but also a main bottleneck for the performance of many machine learning algorithms. 
+The main goal of a PCA analysis is to identify patterns in data; PCA aims to detect the correlation between variables. 
+If a strong correlation between variables exists, the attempt to reduce the dimensionality only makes sense. 
+In a nutshell, this is what PCA is all about: Finding the directions of maximum variance in high-dimensional data 
+and project it onto a smaller dimensional subspace while retaining most of the information.
+
+Here I organize my coding by the following step:
+  1. Loading the Dataset
+  2. Selcet sample
+  3. Spliting the features and main variable
+  4. Standardizing features
+  5. Calculating covarience matrix
+  6. Getting eignvalue and eignmatrix
+  7. Reducing dimensions
+  8. Selecting principle components
+
+
