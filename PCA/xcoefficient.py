@@ -14,8 +14,7 @@ def calcoefficient(x,finalDf):
     '''
     assert isinstance(x,np.ndarray)
     assert isinstance(finalDf,pd.core.frame.DataFrame)
-    L = []
-    for i in range(5):
+
     a1 = np.invert(x) @ finalDf.pc1
     a2 = np.invert(x) @ finalDf.pc2 
     a3 = np.invert(x) @ finalDf.pc3
