@@ -1,8 +1,16 @@
-# -*- coding: utf-8 -*-
 """
 Created on Mon Nov 12 2018
 
 @author: Arda C. Bati
+
+Does data cleaning on the WHO Life expectancy data. Generates different cleaned 
+versions of the data in the directory ./output. This script should be in the same
+folder/directory with the file 'Life Expectancy Data.csv', which is provided on 
+Group 5's github page. 
+
+After running the "Project_data.py" script, use the create_csv() function to create
+.csv files from the variables obtained in the code. The code is completely explained
+by logging statements. Logging level should changed to remove the these messages.
 """
 
 import pandas as pd
@@ -21,10 +29,8 @@ logging.debug(f' ***************************')
 logging.debug(f' PART 1) ANALYZING THE DATA')
 logging.debug(f' ***************************\n')
 
-
 assert os.path.isfile('Life Expectancy Data.csv'),'Please copy "Life Expectancy Data.csv" to the current directory.'
     
-
 df = pd.read_csv('Life Expectancy Data.csv')
 columns = list(df.columns.values)
 logging.debug(f'\nThe column labels of the data are : {columns}\n')
