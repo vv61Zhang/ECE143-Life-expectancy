@@ -14,7 +14,7 @@ def calnum(eig_vals):
     Output:
     Nmin(datatype:int)
     '''
-    assert isinstance(eig_vals,list)
+    assert isinstance(eig_vals,np.ndarray)
     
     Len = len(eig_vals)
     Pe = 0
