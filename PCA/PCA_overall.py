@@ -20,7 +20,7 @@ n is the sample size
 '''
 #df = pd.read_csv(url)
 n = 1000
-df = pd.read_csv('/Users/jinqingyuan/Documents/ECE143/projrct/df_NoNaN.csv')
+df = pd.read_csv('add path here')
 x = df.head(n)
 
 '''Separating out the features'''
