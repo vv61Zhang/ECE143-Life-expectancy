@@ -1,7 +1,7 @@
 Written by Weinan(Eric) Li. w3li@ucsd.edu
 Apply regression to build a prediction model for life expectancy.
 
-PyTorch required.
+For neural network, PyTorch package is required. Preferably with a GPU.
 
 Test with least square method and shallow neural network, linear regression on the way.
 We want to rebuild this model after apply PCA to original data and select more important features.
