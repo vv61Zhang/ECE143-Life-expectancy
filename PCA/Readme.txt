@@ -7,7 +7,7 @@ What PCA does here: Finding the directions of maximum variance in high-dimension
 
 I write down every annotation in each part of code. Please feel free to read them and tell me if there is any doubt.
 
-So far, the input is raw data and out put is a new variable subspace and each eigenvalue, 
-eigenvector in each  dimension by sequence. 
+So far, the input is raw data and output is a new variable subspace and eigenvalues, 
+eigenvectors in each  dimension by relevance sequence.
 
 We can directly use new subspace of variable or only derive the sequence of relevance to help us obtain information more efficiently.
