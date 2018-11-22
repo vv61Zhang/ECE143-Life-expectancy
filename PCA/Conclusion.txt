@@ -1,0 +1,7 @@
+As PCA implies, we can generalize three following perspectives to see the data by mainly focusing on the features of the first two eignvectors. Meanwhile, we have already figured out many factors such as infant deaths, schooling, adult mortality, population, income composition of resources are actually not that much relevant with our main variable, life expectancy.
+Through this method, we narrow down the dataset and got the defined goal which will greatly simplify our work.
+
+1. Physical features(BMI, Alcohol, thinness 1-19 years, under five death)
+2. Diseases (HIVs, Polio, Hepatitis B)
+3. Economy(GDP, expenditure, developed)
+4. Geometric map
