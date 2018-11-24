@@ -17,7 +17,7 @@ import numpy as np
 import logging, sys
 import os
 
-class clean_data:
+class CleanData:
     '''
     Class used to clean the dataset 'Life Expectancy Data.csv'
     '''
