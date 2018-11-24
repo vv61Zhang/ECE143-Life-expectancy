@@ -83,6 +83,8 @@ class CleanData:
         self.__features = [df[['Country','Year','Life expectancy ', i]].dropna(0)  for i in self.indices]
         self.__features.append(df[['Country','Year','Life expectancy ']].dropna(0))
         
+        logging.debug('The features list is in the following format.\n')
+		
         for i in range(len(self.indices)):
             logging.debug(f' {i}- { self.indices[i], self.__features[i].shape}.')
             
@@ -96,7 +98,7 @@ class CleanData:
             self.__modified[self.__modified['Country'] == i] = self.__NaN[self.__NaN['Country'] == i].interpolate(method = 'linear', limit_direction='both')
         
         isNaN1 = self.__modified.isnull().values.any()
-        logging.debug(f' After interpolation, self.__modified still contains NaN values: {isNaN1}')
+        logging.debug(f' After interpolation, modified still contains NaN values: {isNaN1}')
         logging.debug(f' These NaN values are the ones that could not be interpolated, the whole column for the specific country\'s feature was NaN.')
         logging.debug(f' For this type of NaN value, we have no info, so they will be filled with the column averages of the whole data.\n')
         
@@ -108,7 +110,7 @@ class CleanData:
            
         isNaN2 = self.__modified.isnull().values.any()
         logging.debug(f' After this modification checking for NaN values again:')
-        logging.debug(f' self.__modified still contains NaN values: {isNaN2}')
+        logging.debug(f' modified still contains NaN values: {isNaN2}')
         logging.debug(f' Use create_csvs() function to create csv files from the variables in the code.\n')
  
     def create_csvs(self):
