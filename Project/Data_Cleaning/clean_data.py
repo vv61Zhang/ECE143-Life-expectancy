@@ -59,11 +59,8 @@ class CleanData:
             
         df = pd.read_csv('Life Expectancy Data.csv')
                
-        #setting Developed to 2 and Developing to 1
-#        df.loc[df['A'] > 2, 'B'] = new_val
         df.loc[df['Status'] == 'Developing','Status'] = 1
         df.loc[df['Status'] == 'Developed','Status'] = 2
-        
         
         columns = list(df.columns.values)
         
