@@ -6,19 +6,20 @@ Created on Tue Nov 27 13:07:09 2018
 """
 
 #requires pygal,pygal_maps_world,pandas,numpy
-import numpy as np
+
 import pygal.maps.world
-#import pandas 
 from IPython.display import SVG
 from Project.Data_Cleaning import clean_data
 
 def display(data,feature,year):
     '''
-    Feature is a str.
+    Takes a CleanData object "data", a "feature" from this dataset other than Country
+    or Year, and a specific year. On a world map, draws how this feature is distributed
+    in the given year. The year should not be outside the range of the dataset.
     
-    param: data, type: CleanData object
-    param: feature, type: str
-    param year
+    param: data     type: CleanData object
+    param: feature  type: str
+    param: year     type: int
     '''
     from pygal_maps_world.i18n import COUNTRIES
     
@@ -38,10 +39,8 @@ def display(data,feature,year):
     countries={value:key for key, value in COUNTRIES.items()}
     countries['United States of America']='us' # there're more needs to manually match
     
-#    data=pandas.read_csv('Life Expectancy Data.csv')
-    
     display_data=dict()
-    #brute force, needs perfection, only mean to show result
+    
     for i in range(modified.shape[0]):
         row=modified.loc[i]
         if row['Year']==year:
@@ -56,4 +55,5 @@ def display(data,feature,year):
     worldmap_chart = pygal.maps.world.World()
     worldmap_chart.title = '{0} in the year {1}'.format(feature,year)
     worldmap_chart.add('In {0}'.format(year), display_data)
+    
     return SVG(worldmap_chart.render())
