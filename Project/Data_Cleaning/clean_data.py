@@ -1,13 +1,10 @@
 """
 Created on Mon Nov 12 2018
-
 @author: Arda C. Bati
-
 Does data cleaning on the WHO Life expectancy data. Generates different cleaned 
 versions of the data in the directory ./output. The calss should run in the same
 folder/directory with the file 'Life Expectancy Data.csv', which is provided on 
 Group 5's github page. 
-
 The create_csvs() function will create .csv files from the variables obtained in 
 the code.
 """
@@ -27,17 +24,17 @@ class CleanData:
         Does data cleaning on the dataset obtained from 'Life Expectancy Data.csv'
         which should be in the same folder with where this function is ran. Contains
         the variables given below:
-            
+        
         NoNaN: 
             The version of the dataset with rows containing any NaN value removed.
         NaN: 
             The version of the dataset with 0 values replaced with NaN
         modified: 
             The version of the dataset where NaN values are filled with interpolation / means.
-        features: 
+        feature_tables: 
             list containing seperate dataframes for each frame from the data.
         indices: 
-            The indices of the above mentioned features list.
+            The indices of the above mentioned feature_tables list.
         
         param: log_level
             chooses the logging level of the initializer
@@ -46,7 +43,7 @@ class CleanData:
         self.__NoNaN = 0
         self.__NaN = 0
         self.__modified = 0
-        self.__features = 0
+        self.__feature_tables = 0
         self.indices = 0
         
         assert isinstance(log_level,int)
@@ -61,6 +58,13 @@ class CleanData:
         assert os.path.isfile(filename),'Please copy "Life Expectancy Data.csv" to the current directory.'
             
         df = pd.read_csv('Life Expectancy Data.csv')
+               
+        #setting Developed to 2 and Developing to 1
+#        df.loc[df['A'] > 2, 'B'] = new_val
+        df.loc[df['Status'] == 'Developing','Status'] = 1
+        df.loc[df['Status'] == 'Developed','Status'] = 2
+        
+        
         columns = list(df.columns.values)
         
         countries_years = df.groupby('Country').count()['Year']
@@ -71,48 +75,59 @@ class CleanData:
             df = df[df.Country != i]
         
         # Replacing 0 values with NaN
-        self.__NaN = df.copy()
-        self.__NaN = df.replace(0,np.nan)
+        NaN = df.copy()
+        NaN = df.replace(0,np.nan)
         
         # Dropping rows containing NaN in any of their columns
-        self.__NoNaN = self.__NaN.copy()
-        self.__NoNaN = self.__NoNaN.dropna(0)
+        NoNaN = NaN.copy()
+        NoNaN = NoNaN.dropna(0)
          
         # Going over each feature in the dataset, dropping rows containing NaN
-        self.indices = [columns[2]] + columns[4:]
-        self.__features = [df[['Country','Year','Life expectancy ', i]].dropna(0)  for i in self.indices]
-        self.__features.append(df[['Country','Year','Life expectancy ']].dropna(0))
+        indices = [columns[2]] + columns[4:]
+        feature_tables = [df[['Country','Year','Life expectancy ', i]].dropna(0)  for i in indices]
+        feature_tables.append(df[['Country','Year','Life expectancy ']].dropna(0))
         
-        logging.debug('The features list is in the following format.\n')
+        logging.debug('The feature_tables list is in the following format.\n')
 		
-        for i in range(len(self.indices)):
-            logging.debug(f' {i}- { self.indices[i], self.__features[i].shape}.')
+        for i in range(len(indices)):
+            logging.debug(f' {i}- { indices[i], feature_tables[i].shape}.')
             
-        logging.debug(f" 19- ('Country, Year and Life expectancy'), {self.__features[-1].shape}.\n")
+        logging.debug(f" 19- ('Country, Year and Life expectancy'), {feature_tables[-1].shape}.\n")
         
         # Modifying the NaN values by interpolation and mean
         countries = df['Country'].unique()
-        self.__modified = self.__NaN.copy()
+        modified = NaN.copy()
         
         for i in countries:
-            self.__modified[self.__modified['Country'] == i] = self.__NaN[self.__NaN['Country'] == i].interpolate(method = 'linear', limit_direction='both')
+            modified[modified['Country'] == i] = NaN[NaN['Country'] == i].interpolate(method = 'linear', limit_direction='both')
         
-        isNaN1 = self.__modified.isnull().values.any()
+        isNaN1 = modified.isnull().values.any()
         logging.debug(f' After interpolation, modified still contains NaN values: {isNaN1}')
         logging.debug(f' These NaN values are the ones that could not be interpolated, the whole column for the specific country\'s feature was NaN.')
         logging.debug(f' For this type of NaN value, we have no info, so they will be filled with the column averages of the whole data.\n')
         
-        means = self.__NaN.copy()
+        means = NaN.copy()
         means = means.mean()
         
         for i in means.index:
-            self.__modified[i] = self.__modified[i].fillna(means[i])
+            modified[i] = modified[i].fillna(means[i])
            
-        isNaN2 = self.__modified.isnull().values.any()
+        isNaN2 = modified.isnull().values.any()
         logging.debug(f' After this modification checking for NaN values again:')
         logging.debug(f' modified still contains NaN values: {isNaN2}')
         logging.debug(f' Use create_csvs() function to create csv files from the variables in the code.\n')
  
+    
+        modified = modified.reset_index(drop=True)
+        NaN = NaN.reset_index(drop=True)
+        NoNaN = NoNaN.reset_index(drop=True)
+    
+        self.__NoNaN = NoNaN
+        self.__NaN = NaN
+        self.__modified = modified
+        self.__feature_tables = feature_tables
+        self.indices = indices
+    
     def create_csvs(self):
         '''
         Creates csv files from the variables of the object.
@@ -120,7 +135,7 @@ class CleanData:
         output/NaN.csv
         output/NoNaN.csv
         output/modified.csv
-        output/features/<feature_name>.csv
+        output/feature_tables/<feature_name>.csv
         '''
         
         assert False == os.path.isdir('output'),'Please erase the current output directory "./output".'
@@ -130,11 +145,11 @@ class CleanData:
         self.__NoNaN.to_csv('output/NoNaN.csv')
         self.__modified.to_csv('output/modified.csv')
         
-        os.mkdir('output/features')
+        os.mkdir('output/feature_tables')
         for i in range(len(self.indices)):
-            self.__features[i].to_csv(f'output/features/{i}-{self.indices[i].replace("/", "-")}.csv')
+            self.__feature_tables[i].to_csv(f'output/feature_tables/{i}-{self.indices[i].replace("/", "-")}.csv')
         
-        self.__features[-1].to_csv(f'output/features/19-Country_Year_LifeExpectancy.csv')
+        self.__feature_tables[-1].to_csv(f'output/feature_tables/19-Country_Year_LifeExpectancy.csv')
         
         logging.debug(f' csv files created. \n')
         
@@ -151,5 +166,5 @@ class CleanData:
         return self.__modified.copy()
     
     @property
-    def features(self):
-        return self.__features.copy()
+    def feature_tables(self):
+        return self.__feature_tables.copy()
