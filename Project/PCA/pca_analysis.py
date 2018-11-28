@@ -39,6 +39,7 @@ class PCA_Analysis:
         assert isinstance(data, clean_data.CleanData)
         
         df = data.modified
+        
         n = 1000
         x = df.head(n)
         
@@ -60,10 +61,6 @@ class PCA_Analysis:
         principalComponents = pca.fit_transform(x_std)
         principalDf = pd.DataFrame(data = principalComponents , columns = ['pc1', 'pc2','pc3','pc4','pc5'])
         finalDf = pd.concat([principalDf, df[['Country','Year','Status','Life expectancy ']]], axis = 1)
-        
-        if finalDf.shape[0] > df.shape[0]:
-            diff = finalDf.shape[0] - df.shape[0];
-            finalDf = finalDf[:-diff]
         
         '''Correlation Matrix'''
         ''' eig_vals, eig_vecs are what we should care about'''
