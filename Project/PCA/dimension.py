@@ -3,7 +3,7 @@
 """
 Created on Mon Nov 19 23:49:51 2018
 
-@author: jinqingyuan
+@author: Qingyuan Jin
 """
 
 def calnum(eig_vals):
