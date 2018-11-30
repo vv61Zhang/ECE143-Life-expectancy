@@ -221,9 +221,9 @@ class CleanData:
         columns2.remove('Country')
         
         #Fixing floating point issues
-        modified[columns2] = modified[columns2].astype(np.float32)
-        NaN[columns2] = NaN[columns2].astype(np.float32)
-        NoNaN[columns2] = NoNaN[columns2].astype(np.float32)
+        modified[columns2] = modified[columns2].astype(np.float16)
+        NaN[columns2] = NaN[columns2].astype(np.float16)
+        NoNaN[columns2] = NoNaN[columns2].astype(np.float16)
         
         for table in feature_tables:
             columns_t = list(table.columns.values)
