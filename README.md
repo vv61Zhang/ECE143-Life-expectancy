@@ -8,19 +8,19 @@ The modules/classes we created for the project are all stored under the /Project
 
 As I (Arda Bati) am working on the structuring of the codes, my name comes up in many of the commits. For clarity, our work distribution until now is given below: (subject to change)
 
-Arda C. Bati
-  Data Cleaning
-  Object Oriented structuring of the script based codes.
+Arda C. Bati  -  
+  Data Cleaning,  
+  Object Oriented structuring of the script based codes,  
   Main function (until now)
   
-Qingyuan Jin
-  Principal Component Analysis
+Qingyuan Jin  -  
+  Principal Component Analysis,  
   Data Visualization (details to follow)
 
-Weinan Li
-  Map Display
-  Linear Regression and Neural Network Model
+Weinan Li  -  
+  Map Display,  
+  Linear Regression and Neural Network Model,  
   Data Visualization (details to follow)
   
-Wei Zhang
+Wei Zhang  -  
   Data Visualization (details to follow)
