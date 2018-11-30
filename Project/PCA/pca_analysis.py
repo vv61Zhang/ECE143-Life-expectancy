@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Mon Nov 19 16:20:43 2018
-@author: jinqingyuan
+@author: Qingyuan Jin
 """
 
 import pandas as pd 
