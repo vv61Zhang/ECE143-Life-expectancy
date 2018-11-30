@@ -3,7 +3,7 @@
 """
 Created on Mon Nov 19 23:51:29 2018
 
-@author: jinqingyuan
+@author: Qingyuan Jin
 """
 
 
@@ -19,7 +19,7 @@ def calcoefficient(x,finalDf,features):
     Outputs:
     pcoef(datatype:list): implies the index of each principle component in list'features'
     finalcomp(datatype:list):shows the most four negative components and most four positive components
-    '''
+    '''jinqingyuan
     assert isinstance(x,np.ndarray)
     assert isinstance(finalDf,pd.core.frame.DataFrame)
     assert isinstance(features,list)
