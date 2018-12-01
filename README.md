@@ -10,7 +10,7 @@ As I (Arda Bati) am working on the structuring of the codes, my name comes up in
 
 Arda C. Bati  -  
   Data Cleaning,  
-  Object Oriented restructuring of all the code, 
+  Object Oriented restructuring of all the code,  
   Main function (until now)
   
 Qingyuan Jin  -  
