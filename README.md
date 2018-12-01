@@ -18,19 +18,19 @@ The modules/classes we created for the project are all stored under the "Project
 As I (Arda Bati) am working on the structuring of the codes, my name comes up in many of the commits. For clarity, our main work distribution until now is given below: (main authors of each part)
 
 Arda C. Bati  
- - Data Cleaning,  
- - Object Oriented restructuring of all the code,  
+ - Data Cleaning
+ - Object Oriented restructuring of all the code
  - Main function (until now)
    
 Qingyuan Jin  
- - Principal Component Analysis,  
+ - Principal Component Analysis
  - Data Visualization (details to follow)
 
- - Weinan Li  
-  Map Display,  
-  Linear Regression and Neural Network Model,  
-  Data Visualization (details to follow),  
-  Extraction of GDP / Population
+Weinan Li  
+ - Map Display,  
+ - Linear Regression and Neural Network Model,  
+ - Data Visualization (details to follow),  
+ - Extraction of GDP / Population
   
- - Wei Zhang  
-  Data Visualization (details to follow)
+Wei Zhang  
+ - Data Visualization (details to follow)
