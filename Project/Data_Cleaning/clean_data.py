@@ -36,7 +36,7 @@ class CleanData:
             list containing seperate dataframes for each frame from the data.
             
         param: df
-            DataFrame input from the extract_data() function from             GDP_Pop_Extraction.extraction
+            DataFrame input from the extract_data() function from GDP_Pop_Extraction.extraction
         
         param: log_level
             chooses the logging level of the initializer
@@ -55,14 +55,10 @@ class CleanData:
         #format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
         
         assert isinstance(df,pd.DataFrame)   
-        #df = pd.read_csv('Life Expectancy Data.csv')
-        #df = data
                
         df.loc[df['Status'] == 'Developing','Status'] = 1
         df.loc[df['Status'] == 'Developed','Status'] = 2
-        
-        #columns = list(df.columns.values)
-        
+
         countries_years = df.groupby('Country').count()['Year']
         countries_missing_years = countries_years[countries_years != 16]
         
@@ -165,8 +161,6 @@ class CleanData:
         
         means = NaN.copy()
         means = means.mean()
-        
-        means['percentage expenditure'] = 2.0
         
         for i in means.index:
             to_modify[i] = to_modify[i].fillna(means[i])
