@@ -4,9 +4,8 @@
 Created on Mon Nov 12 2018
 @author: Arda C. Bati
 Does data cleaning on the WHO Life expectancy data. Generates different cleaned 
-versions of the data in the directory ./output. The class should run in the same
-folder/directory with the file 'Life Expectancy Data.csv', which is provided on 
-Group 5's github page. 
+versions of the data in the directory ./output.
+
 The create_csvs() function will create .csv files from the variables obtained in 
 the code.
 """
@@ -21,7 +20,7 @@ class CleanData:
     Class used to clean the dataset 'Life Expectancy Data.csv'
     '''
     
-    def __init__(self,log_level=logging.INFO):
+    def __init__(self, df, log_level=logging.INFO):
         '''
         Does data cleaning on the dataset obtained from 'Life Expectancy Data.csv'
         which should be in the same folder with where this function is ran. Contains
@@ -35,7 +34,9 @@ class CleanData:
             The version of the dataset where NaN values are filled with interpolation / means.
         feature_tables: (list)
             list containing seperate dataframes for each frame from the data.
-
+            
+        param: df
+            DataFrame input from the extract_data() function from             GDP_Pop_Extraction.extraction
         
         param: log_level
             chooses the logging level of the initializer
@@ -53,11 +54,9 @@ class CleanData:
         logging.basicConfig(stream=sys.stdout, level=log_level)
         #format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
         
-        # Analyzing the data
-        filename = './Life Expectancy Data.csv'
-        assert os.path.isfile(filename),'Please copy "Life Expectancy Data.csv" to the current directory.'
-            
-        df = pd.read_csv('Life Expectancy Data.csv')
+        assert isinstance(df,pd.DataFrame)   
+        #df = pd.read_csv('Life Expectancy Data.csv')
+        #df = data
                
         df.loc[df['Status'] == 'Developing','Status'] = 1
         df.loc[df['Status'] == 'Developed','Status'] = 2
@@ -85,9 +84,12 @@ class CleanData:
         to_modify = NaN.copy()
         modified = self.__modify_data(to_modify,NaN)
         
+        #Decimal point correction (the data set has decimal point errors)
         sensitivity = 3
         modified = self.__decimal_fix(modified.copy(),sensitivity)
-    
+        
+        modified = self.__GDP_Pop_Fix(modified.copy())
+            
         #Doing the final corrections on the data
         modified, NaN, NoNaN, feature_tables = self.__final_corrections(modified.copy(), NaN.copy(), NoNaN.copy(), feature_tables)
 
@@ -112,6 +114,27 @@ class CleanData:
     @property
     def feature_tables(self):
         return self.__feature_tables.copy()
+    
+    
+    @staticmethod
+    def __GDP_Pop_Fix(df):
+        '''
+        This function turns the GDP column of the data frame into GDP per capita and
+        population column of the data frame into population (millions)
+        
+        param:
+            df (DataFrame)
+        returns:
+            result (DataFrame)
+        '''
+        assert isinstance(df,pd.DataFrame)
+        #Modifiyng the GDP as GDP per capita
+        df['GDP'] = df['GDP'] / df['Population']
+            
+        #Representing the population values in millions
+        df['Population'] = df['Population'] / 10**6
+        result = df
+        return result
         
     @staticmethod
     def __modify_data(to_modify,NaN):
@@ -142,6 +165,8 @@ class CleanData:
         
         means = NaN.copy()
         means = means.mean()
+        
+        means['percentage expenditure'] = 2.0
         
         for i in means.index:
             to_modify[i] = to_modify[i].fillna(means[i])
@@ -220,10 +245,14 @@ class CleanData:
         columns2 = columns
         columns2.remove('Country')
         
-        #Fixing floating point issues
-        modified[columns2] = modified[columns2].astype(np.float16)
-        NaN[columns2] = NaN[columns2].astype(np.float16)
-        NoNaN[columns2] = NoNaN[columns2].astype(np.float16)
+        #Fixing reducing unnecessary precision
+        modified[columns2] = modified[columns2].astype(np.float32)
+        NaN[columns2] = NaN[columns2].astype(np.float32)
+        NoNaN[columns2] = NoNaN[columns2].astype(np.float32)
+        
+        assert modified[modified == np.inf].sum().sum() != np.inf
+        assert NaN[modified == np.inf].sum().sum() != np.inf
+        assert NoNaN[modified == np.inf].sum().sum() != np.inf
         
         for table in feature_tables:
             columns_t = list(table.columns.values)
@@ -303,7 +332,7 @@ class CleanData:
                    df.at[key1,index] = point1
         df_fixed = df          
         return df_fixed      
-        
+            
     
     def create_csvs(self):
         '''
