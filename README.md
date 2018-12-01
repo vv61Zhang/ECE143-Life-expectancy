@@ -6,11 +6,11 @@ The main.ipynb file contains the main our project, which will show the work we h
 
 The modules/classes we created for the project are all stored under the /Project directory. Each subfolder in /Project has its own readme, written by the original author(s) of the code.
 
-As I (Arda Bati) am working on the structuring of the codes, my name comes up in many of the commits. For clarity, our work distribution until now is given below: (subject to change)
+As I (Arda Bati) am working on the structuring of the codes, my name comes up in many of the commits. For clarity, our main work distribution until now is given below: (main authors of each part)
 
 Arda C. Bati  -  
   Data Cleaning,  
-  Object Oriented restructuring of all the code,  
+  Object Oriented restructuring of all the code, 
   Main function (until now)
   
 Qingyuan Jin  -  
@@ -21,7 +21,7 @@ Weinan Li  -
   Map Display,  
   Linear Regression and Neural Network Model,  
   Data Visualization (details to follow),  
-  Extraction of GDP / Population from another dataset
+  Extraction of GDP / Population
   
 Wei Zhang  -  
   Data Visualization (details to follow)
