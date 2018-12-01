@@ -57,6 +57,7 @@ def extract_data():
         except:
             #few countries unable to match, show here
             #print(year,country)
+            pass
             
     return data
         
