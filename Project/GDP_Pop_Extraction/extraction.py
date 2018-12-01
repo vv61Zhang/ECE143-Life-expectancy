@@ -25,14 +25,14 @@ def extract_data():
         data (DataFrame)
     '''
     
-    filename1 = 'Project_Files/Life Expectancy Data.csv'
-    filename2 = 'Project_Files/GDP.csv'
-    filename3 = 'Project_Files/Population.csv'
+    filename1 = 'Files/Life Expectancy Data.csv'
+    filename2 = 'Files/GDP.csv'
+    filename3 = 'Files/Population.csv'
     
     assert os.path.isfile(filename1)
     assert os.path.isfile(filename2)
     assert os.path.isfile(filename3)
-    
+     
     data=pd.read_csv(filename1)
     gdp=pd.read_csv(filename2,error_bad_lines=False,skiprows=4)
     population=pd.read_csv(filename3,skiprows=4)
@@ -56,7 +56,7 @@ def extract_data():
             data.iloc[i,GDP_index]=float(G_DP)
         except:
             #few countries unable to match, show here
-            #print(year,country)
+            print(year,country)
             
     return data
         
