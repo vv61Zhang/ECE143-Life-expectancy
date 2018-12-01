@@ -56,7 +56,7 @@ def extract_data():
             data.iloc[i,GDP_index]=float(G_DP)
         except:
             #few countries unable to match, show here
-            print(year,country)
+            #print(year,country)
             
     return data
         
