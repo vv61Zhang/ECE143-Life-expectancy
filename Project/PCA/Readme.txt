@@ -1,5 +1,14 @@
 Written by Qingyuan Jin, q1jin@ucsd.edu, 11/19/2018
 
+Module imported:
+import pandas as pd 
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn import decomposition
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+from Project.Data_Cleaning import clean_data
+
 Cause we have 18-dimensional variable in row data, it is simply waste of time to deal with all of them. 
 Thus we should detect the data internally to find our principle components, which involves PCA(Principle component analysis).
  
