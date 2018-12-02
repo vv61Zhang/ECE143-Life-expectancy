@@ -12,7 +12,14 @@ Python: Python 3.6.6 :: Anaconda, Inc.
 
 Modules required: (latest versions)   
  - pygal   
- - pygal_maps_world   
+ - pygal_maps_world
+ - pandas as pd
+ - numpy as np
+ - matplotlib.pyplot as plt
+ - from sklearn import decomposition
+ - from sklearn.decomposition import PCA
+ - from sklearn.preprocessing import StandardScaler
+ - from Project.Data_Cleaning import clean_data
 
 The modules/classes we created for the project are all stored under the "Project/" directory. Each subfolder in "Project/" has its own readme, giving brief information and stating the original author(s) of the code.
 
@@ -29,7 +36,6 @@ Qingyuan Jin
 
 Weinan Li  
  - Map Display,  
- - Linear Regression and Neural Network Model
  - Data Visualization (details to follow)
  - Extraction of GDP / Population
   
