@@ -14,6 +14,7 @@ import pygal.style
 from pygal.style import Style
 import numpy as np
 import pandas as pd
+from matplotlib import pyplot as plt
 def display(data,feature,year):
     '''
     Takes a CleanData object "data", a "feature" from this dataset other than Country
@@ -143,9 +144,9 @@ def displaymap(data,feature,year,color1=(255,100,100),color2=(1,200,200)):
                 #print(countryname)
                 pass
         
-    #build colorbar 
-    maxValue=max(lifedata.values())
-    minValue=min(lifedata.values())
+    #use extreme values in 15 years to build color bar and determine colors of each country
+    maxValue=max(modified['Life expectancy '])
+    minValue=min(modified['Life expectancy '])
     
     
     lifedata=sorted(lifedata.items(), key=lambda d: d[1])
@@ -153,11 +154,18 @@ def displaymap(data,feature,year,color1=(255,100,100),color2=(1,200,200)):
     #colors need to be adjusted for clearer display
 
     #fractionlist=list(np.linspace(0,1,len(lifedata)))
+    #the colors shown on colorbar
+    colors = plt.cm.RdBu(np.linspace(0,1.,129)) 
+    colors=colors*255
+    colors=colors.astype(int)
+    colors[1][0:3]
     colorlist=list()
     for i in lifedata:
-        fraction=(i[1]-minValue)/(maxValue-minValue)
+        index=int(128*(i[1]-minValue)/(maxValue-minValue))
     
-        rgb=blend_color(color1,color2,fraction)
+        #rgb=blend_color(color1,color2,fraction)
+        #hexa=decimal2hex(rgb)
+        rgb=colors[index][0:3]
         hexa=decimal2hex(rgb)
         colorlist.append(hexa)
     #lifedata=lifedata.sort_index(by='Value')
@@ -174,7 +182,7 @@ def displaymap(data,feature,year,color1=(255,100,100),color2=(1,200,200)):
   colors=tuple(colorlist))
     
     worldmap_chart = pygal.maps.world.World(style=custom_style)
-    worldmap_chart.title = feature+' in a given year'
+    worldmap_chart.title = feature+' in '+str(year)
     for i in lifedata:
         worldmap_chart.add("",{i[0]:i[1]})
     """
@@ -186,7 +194,7 @@ def displaymap(data,feature,year,color1=(255,100,100),color2=(1,200,200)):
     worldmap_chart.add('<90', life90.to_dict()['Value'])
     """
     #worldmap_chart.add('<40', lifedata.to_dict()['Value'])
-    
+    #return colorlist
     return SVG(worldmap_chart.render())
 
 
@@ -213,7 +221,30 @@ def decimal2hex(color):
             ans+='0'+hex(int(i))[2:]
         else:
             ans+=hex(int(i))[2:]
-        
-    
-    
+            
     return ans
+
+
+def f(x, y):
+    return x
+
+def createBar():
+    """
+    use matplotlib to create a color bar to show on the map.
+    Need to paste externally.
+    """
+    from matplotlib import pyplot as plt
+    import numpy as np
+
+    maxValue=max(modified['Life expectancy '])
+    minValue=min(modified['Life expectancy '])
+    n = 10
+    x = np.linspace(minValue,maxValue,100)
+    y = np.linspace(minValue,maxValue,100)
+    X, Y = np.meshgrid(x, y)
+    plt.imshow(f(X, Y), cmap='RdBu', origin='low')
+    plt.colorbar()
+     
+    plt.xticks(())
+    plt.yticks(())
+    plt.show()
