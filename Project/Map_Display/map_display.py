@@ -10,7 +10,10 @@ Created on Tue Nov 27 13:07:09 2018
 import pygal.maps.world
 from IPython.display import SVG
 from Project.Data_Cleaning import clean_data
-
+import pygal.style
+from pygal.style import Style
+import numpy as np
+import pandas as pd
 def display(data,feature,year):
     '''
     Takes a CleanData object "data", a "feature" from this dataset other than Country
@@ -76,19 +79,19 @@ def display(data,feature,year):
 
 
 
-def displaymap(data,feature,style,year):
+def displaymap(data,feature,year):
     """
     Show life expectancy of all countries in data on map.
     
     input:
         data, panda.dataframe
         feature, str
-        style, pygal.style
         year, int, given year
     output:
         map
     """
-    
+    from pygal_maps_world.i18n import COUNTRIES
+
     countries={value:key for key, value in COUNTRIES.items()}
     #manually add countries with different names between api and csv file.
     countries['United States of America']='us' # there're more needs to manually match
@@ -122,10 +125,9 @@ def displaymap(data,feature,style,year):
                 pass
         
     #build colorbar 
-    maxValue=max(lifedata.values())
-    minValue=min(lifedata.values())
+
     
-    #colors need to be adjusted for clearer display
+    #divide data into groups
     lifedata=pd.DataFrame.from_dict(lifedata,orient='index',columns=['Value'])
     life40=lifedata[(lifedata['Value']<40) ]
     life50=lifedata[(lifedata['Value']>=40) & (lifedata['Value']<50) ]
@@ -134,8 +136,34 @@ def displaymap(data,feature,style,year):
     life80=lifedata[(lifedata['Value']>=70) & (lifedata['Value']<80) ]
     life90=lifedata[(lifedata['Value']>=80) & (lifedata['Value']<90) ]
     
+    color1=(255,1,1)
+    color2=(1,200,255)
     
-    worldmap_chart = pygal.maps.world.World(style=style)
+    fractionlist=list(np.linspace(0,1,6))
+    colorlist=list()
+    for i in fractionlist:
+        rgb=blend_color(color1,color2,i)
+        hexa=decimal2hex(rgb)
+        colorlist.append(hexa)
+    
+
+    #build map style
+    custom_style = Style(
+  background='transparent',
+  plot_background='transparent',
+  foreground='#53E89B',
+  foreground_strong='#53A0E8',
+  foreground_subtle='#630C0D',
+  opacity='.6',
+  opacity_hover='.9',
+  transition='400ms ease-in',
+  colors=tuple(colorlist))
+    
+        
+    
+    
+    
+    worldmap_chart = pygal.maps.world.World(style=custom_style)
     worldmap_chart.title = feature+' in a given year'
     
     worldmap_chart.add('<40', life40.to_dict()['Value'])
@@ -148,3 +176,32 @@ def displaymap(data,feature,style,year):
     #worldmap_chart.add('<40', lifedata.to_dict()['Value'])
     
     return SVG(worldmap_chart.render())
+
+
+
+
+def blend_color(color1, color2, f):
+    """
+    find gradual color between color1 and color2, f as fraction
+    """
+    assert isinstance(color1,tuple)
+    r1, g1, b1 = color1
+    r2, g2, b2 = color2
+    r = r1 + (r2 - r1) * f
+    g = g1 + (g2 - g1) * f
+    b = b1 + (b2 - b1) * f
+    return r, g, b
+def decimal2hex(color):
+    """
+    convert decimal rgb color to hex
+    """
+    ans='#'
+    for i in color:
+        if len(hex(int(i))[2:])<2:
+            ans+='0'+hex(int(i))[2:]
+        else:
+            ans+=hex(int(i))[2:]
+        
+    
+    
+    return ans
