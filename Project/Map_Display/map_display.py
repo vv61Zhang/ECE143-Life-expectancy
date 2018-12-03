@@ -85,13 +85,16 @@ def display_Expectancy(data,feature,year):
     
     input:
         data, panda.dataframe
-        feature, str
+        feature, str, Life expectancy
         year, int, given year
     output:
         map
     """
     from pygal_maps_world.i18n import COUNTRIES
-
+    assert isinstance(data,pd.core.frame.DataFrame)
+    assert isinstance(feature,str) and feature=='Life expectancy '
+    assert isinstance(year,int) and year<2016 and year>1999
+    
     countries={value:key for key, value in COUNTRIES.items()}
     #manually add countries with different names between api and csv file.
     countries['United States of America']='us' # there're more needs to manually match
