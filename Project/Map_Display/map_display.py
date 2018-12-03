@@ -79,25 +79,38 @@ def display(data,feature,year):
 
 
 
-def display_Expectancy(data,feature,year):
+def displaymap(data,feature,year,color1=(255,100,100),color2=(1,200,200)):
     """
-    Show life expectancy of all countries in data on map.
+    Show feature of all countries in data on map.
+    Custom style
+    Use color1 and color2 as two extreme values, set each country's color based on gradient.
     
     input:
         data, panda.dataframe
-        feature, str, Life expectancy
+        feature, str
         year, int, given year
     output:
         map
     """
+    
+    
     from pygal_maps_world.i18n import COUNTRIES
-    #assert isinstance(data, clean_data.CleanData)
     
-    assert isinstance(feature,str) and feature=='Life expectancy '
-    assert isinstance(year,int) and year<2016 and year>1999
+    assert isinstance(data, clean_data.CleanData)
     
+    assert isinstance(feature,str)
+    valid_features = list(data.modified.columns)
+    valid_features.remove('Country')
+    valid_features.remove('Year')
+    assert feature in valid_features
+    
+    assert isinstance(year,int)
+    modified = data.modified
+    assert modified.Year.min() <= year <= modified.Year.max()   
+    
+    #match the country codes
     countries={value:key for key, value in COUNTRIES.items()}
-    #manually add countries with different names between api and csv file.
+    countries['United States of America']='us' # there're more needs to manually match
     countries['United States of America']='us' # there're more needs to manually match
     countries['United Kingdom of Great Britain and Northern Ireland']='gb'
     countries['Bolivia (Plurinational State of)']='bo'
@@ -115,10 +128,12 @@ def display_Expectancy(data,feature,year):
     countries['Venezuela (Bolivarian Republic of)']='ve'
     
     
+    
+    modified = data.modified
     lifedata=dict()
     #brute force, needs perfection, only mean to show result
-    for i in range(data.shape[0]):
-        row=data.loc[i]
+    for i in range(modified.shape[0]):
+        row=modified.loc[i]
         if row['Year']==year:
             countryname=row['Country']
             target=row[feature]
@@ -129,29 +144,24 @@ def display_Expectancy(data,feature,year):
                 pass
         
     #build colorbar 
+    maxValue=max(lifedata.values())
+    minValue=min(lifedata.values())
+    
+    
+    lifedata=sorted(lifedata.items(), key=lambda d: d[1])
+    
+    #colors need to be adjusted for clearer display
 
-    
-    #divide data into groups
-    lifedata=pd.DataFrame.from_dict(lifedata,orient='index',columns=['Value'])
-    life40=lifedata[(lifedata['Value']<40) ]
-    life50=lifedata[(lifedata['Value']>=40) & (lifedata['Value']<50) ]
-    life60=lifedata[(lifedata['Value']>=50) & (lifedata['Value']<60) ]
-    life70=lifedata[(lifedata['Value']>=60) & (lifedata['Value']<70) ]
-    life80=lifedata[(lifedata['Value']>=70) & (lifedata['Value']<80) ]
-    life90=lifedata[(lifedata['Value']>=80) & (lifedata['Value']<90) ]
-    
-    color1=(255,1,1)
-    color2=(1,200,255)
-    
-    fractionlist=list(np.linspace(0,1,6))
+    #fractionlist=list(np.linspace(0,1,len(lifedata)))
     colorlist=list()
-    for i in fractionlist:
-        rgb=blend_color(color1,color2,i)
+    for i in lifedata:
+        fraction=(i[1]-minValue)/(maxValue-minValue)
+    
+        rgb=blend_color(color1,color2,fraction)
         hexa=decimal2hex(rgb)
         colorlist.append(hexa)
+    #lifedata=lifedata.sort_index(by='Value')
     
-
-    #build map style
     custom_style = Style(
   background='transparent',
   plot_background='transparent',
@@ -163,20 +173,18 @@ def display_Expectancy(data,feature,year):
   transition='400ms ease-in',
   colors=tuple(colorlist))
     
-        
-    
-    
-    
     worldmap_chart = pygal.maps.world.World(style=custom_style)
-    worldmap_chart.title = feature+' in '+str(year)
-    
+    worldmap_chart.title = feature+' in a given year'
+    for i in lifedata:
+        worldmap_chart.add("",{i[0]:i[1]})
+    """
     worldmap_chart.add('<40', life40.to_dict()['Value'])
     worldmap_chart.add('<50', life50.to_dict()['Value'])
     worldmap_chart.add('<60', life60.to_dict()['Value'])
     worldmap_chart.add('<70', life70.to_dict()['Value'])
     worldmap_chart.add('<80', life80.to_dict()['Value'])
     worldmap_chart.add('<90', life90.to_dict()['Value'])
-    
+    """
     #worldmap_chart.add('<40', lifedata.to_dict()['Value'])
     
     return SVG(worldmap_chart.render())
