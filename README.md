@@ -35,7 +35,8 @@ Qingyuan Jin
  - Data Visualization (details to follow)
 
 Weinan Li  
- - Map Display,  
+ - Map Display
+ - Linear Regression and Neural Network Model
  - Data Visualization (details to follow)
  - Extraction of GDP / Population
   
