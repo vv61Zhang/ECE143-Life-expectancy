@@ -79,7 +79,7 @@ def display(data,feature,year):
 
 
 
-def displaymap(data,feature,year):
+def display_Expectancy(data,feature,year):
     """
     Show life expectancy of all countries in data on map.
     
