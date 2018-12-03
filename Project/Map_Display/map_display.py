@@ -91,7 +91,8 @@ def display_Expectancy(data,feature,year):
         map
     """
     from pygal_maps_world.i18n import COUNTRIES
-    assert isinstance(data,pd.core.frame.DataFrame)
+    #assert isinstance(data, clean_data.CleanData)
+    
     assert isinstance(feature,str) and feature=='Life expectancy '
     assert isinstance(year,int) and year<2016 and year>1999
     
@@ -167,7 +168,7 @@ def display_Expectancy(data,feature,year):
     
     
     worldmap_chart = pygal.maps.world.World(style=custom_style)
-    worldmap_chart.title = feature+' in a given year'
+    worldmap_chart.title = feature+' in '+str(year)
     
     worldmap_chart.add('<40', life40.to_dict()['Value'])
     worldmap_chart.add('<50', life50.to_dict()['Value'])
